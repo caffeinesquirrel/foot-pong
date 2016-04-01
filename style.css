@@ -1,0 +1,43 @@
+body {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto
+}
+
+#field {
+  width: 500px;
+  height: 250px;
+  border: 10px groove black;
+  background-color: #00FF00;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+#ball {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -20px;
+  margin-top: -20px;
+  transition: top 2s, left 2s
+}
+
+#keeperLeft {
+  width: 15px;
+  height: 55px;
+  background-color: white;
+  position: absolute;
+  top: 40%;
+  left: 0%;
+}
+
+#keeperRight {
+  width: 15px;
+  height: 55px;
+  background-color: black;
+  position: absolute;
+  top: 40%;
+  left: 97%;
+}
