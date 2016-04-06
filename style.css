@@ -21,7 +21,6 @@ body {
   left: 50%;
   margin-left: -20px;
   margin-top: -20px;
-  transition: top 2s, left 2s
 }
 
 #keeperLeft {

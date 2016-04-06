@@ -1,4 +1,4 @@
-'use strickt'
+'use strict'
 
 field.onclick = function(event) {
 
