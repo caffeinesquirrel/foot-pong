@@ -7,13 +7,14 @@ class Game {
     this.ballX = 0;
     this.ballY = 0;
     this.BEAT = 1000/30;
+    this._resultLeft = document.querySelector('.leftResult');
+    this._resultRight = document.querySelector('.rightResult');
   }
 
   start() {
     this._randomDirection();
     this._keyEvents();
     this._pulse();
-
   }
 
   _randomDirection() {
@@ -28,14 +29,14 @@ class Game {
 
   _getDirection() {
     if (this.playerR) {
-      keeperRight.move(STEP * this.playerR);      
+      keeperRight.move(STEP * this.playerR);
     }
 
     if (this.playerL) {
       keeperLeft.move(STEP * this.playerL);
     }
 
-    if(this.ballX) {
+    if(this.ballX || this.ballY) {
       let direction = ballO.move(STEP * this.ballX, STEP * this.ballY);
       if (direction.x) {
         this.ballX = direction.x;
@@ -43,12 +44,24 @@ class Game {
       if (direction.y) {
         this.ballY = direction.y;
       }
+
+      if(direction.goal) {
+        this._gameScore(direction.goal);
+      }
     }
   }
 
   _pulse() {
     this._getDirection();
     setTimeout(() => this._pulse.call(this), this.BEAT);
+  }
+
+  _gameScore(goal) {
+    if (goal < 0) {
+     this._resultLeft.innerHTML = +(this._resultLeft.innerHTML) + 1;
+    } else {
+     this._resultRight.innerHTML = +(this._resultRight.innerHTML) + 1;
+    }
   }
 
   _moveBall() {

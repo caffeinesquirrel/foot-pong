@@ -87,6 +87,7 @@ Ball.prototype.move = function(valueX, valueY) {
   let top = info.minY;
   let directionX = 1;
   let directionY = 1;
+  let goal = 0;
 
   if (info.ballX <= info.keepL && info.goalL)  {
      left = info.keepL;
@@ -100,6 +101,9 @@ Ball.prototype.move = function(valueX, valueY) {
   } else if (info.ballX > info.maxX) {
     left = info.maxX;
     directionX = -1;
+    goal = 1;
+  } else if (info.ballX <= info.minX) {
+    goal = -1;
   }
 
   if (info.ballY > info.maxY) {
@@ -116,6 +120,7 @@ Ball.prototype.move = function(valueX, valueY) {
   return {
     x: directionX,
     y: directionY,
+    goal: goal,
   }
 }
 
