@@ -1,13 +1,11 @@
 'use strict'
 
-const STEP = 5;
+const STEP = 5; // pix/tick -> pix/sec
 
 const DOWNR = 40;
 const UPR = 38;
 const DOWNL = 83;
 const UPL = 87;
-
-const TIK = 1000/30;
 
 let ball = document.getElementById('ball');
 let field = document.getElementById('field');
@@ -129,76 +127,3 @@ let keeperRight = new GoalKeeper('keeperRight');
 keeperRight.top = keeperRight.elem.getBoundingClientRect().top - field.getBoundingClientRect().top - field.clientTop;
 keeperRight.bottom =  keeperRight.top + keeperRight.elem.offsetHeight;
 let ballO = new Ball();
-
-let game = {
-   playerL: 0,
-   playerR: 0,
-   ballX: 0,
-   ballY: 0,
-   check : function () {
-    // console.log('geme', ballO);
-   },
-}
-
-function tikTak() {
-  if (timerId) {
-     clearTimeout(timerId);
-     console.log('Stop');
-     timerId = undefined;
-     return;
-   }
-
-   let min = -2;
-   let max = 2;
-   game.ballX = Math.round( min - 0.5 + Math.random() * (max - min + 1) );
-   game.ballY = Math.round( min - 0.5 + Math.random() * (max - min + 1) );
-   console.log(game.ballX, game.ballY);
-   timerId = setTimeout(function tick() {
-        game.check();
-       checkAll();
-     timerId = setTimeout(tick, TIK);
-    }, TIK);
-}
-
-function checkAll() {
-   if (game.playerR) {
-     keeperRight.move(STEP * game.playerR);
-     game.playerR = 0;
-   }
-
-   if (game.playerL) {
-     keeperLeft.move(STEP * game.playerL);
-     game.playerL = 0;
-   }
-
-   if(game.ballX) {
-     let direction = ballO.move(STEP * game.ballX, STEP * game.ballY);
-     //console.log(direction.x, direction.y);
-     if (direction.x) {
-       game.ballX = direction.x;
-     }
-     if (direction.y) {
-       game.ballY = direction.y;
-     }
-   }
-}
-
-
-document.onkeydown = (event) => {
-
-  if (event.keyCode === DOWNR) {
-    game.playerR = 1;
-  }
-
-  if (event.keyCode === UPR) {
-    game.playerR = -1;
-  }
-
-  if (event.keyCode === DOWNL) {
-    game.playerL = 1;
-  }
-
-  if (event.keyCode === UPL) {
-    game.playerL = -1;
-  }
-}
