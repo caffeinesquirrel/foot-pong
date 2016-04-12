@@ -11,7 +11,7 @@ class Game {
 
   start() {
     this._randomDirection();
-    this._keyDownEvent();
+    this._keyEvents();
     this._pulse();
 
   }
@@ -28,13 +28,11 @@ class Game {
 
   _getDirection() {
     if (this.playerR) {
-      keeperRight.move(STEP * this.playerR);
-      this.playerR = 0;
+      keeperRight.move(STEP * this.playerR);      
     }
 
     if (this.playerL) {
       keeperLeft.move(STEP * this.playerL);
-      this.playerL = 0;
     }
 
     if(this.ballX) {
@@ -61,8 +59,9 @@ class Game {
 
   }
 
-  _keyDownEvent() {
+  _keyEvents() {
     document.addEventListener('keydown', () => this._onKeyDown.call(this, event));
+    document.addEventListener('keyup', () => this._onKeyUp.call(this, event));
   }
 
   _onKeyDown(event) {
@@ -80,6 +79,17 @@ class Game {
 
     if (event.keyCode === UPL) {
       this.playerL = -1;
+    }
+  }
+
+  _onKeyUp(event) {
+
+    if (event.keyCode === DOWNR  || event.keyCode === UPR) {
+      this.playerR = 0;
+    }
+
+    if (event.keyCode === DOWNL || event.keyCode === UPL) {
+      this.playerL = 0;
     }
   }
 }
