@@ -56,12 +56,6 @@ Ball.prototype.getFieldSizes = function(valueX, valueY) {
 
   let coordX = (coordsBall.left + valueX)  - (coordsField.left - field.clientLeft);
   let coordY = (coordsBall.top + valueY) - (coordsField.top - field.clientTop);
-  //console.log(coordX, valueX, (coordsField.left - field.clientLeft));
-
-
-  //script.js:59 -146089710411.2  -146089710661.2 438.5
-  //script.js:59 38.30000000000001  3.3000000000000003 438.5
-
 
   return {
     ballX: coordX,
@@ -126,8 +120,8 @@ Ball.prototype.move = function(valueX, valueY, distanceX) {
   this.elem.style.top = top + 'px';
 
   return {
-    x: directionX,
-    y: directionY,
+    xDirectionChange: directionX,
+    yDirectionChange: directionY,
     goal: goal,
   }
 }
