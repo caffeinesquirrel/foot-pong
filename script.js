@@ -54,8 +54,14 @@ Ball.prototype.getFieldSizes = function(valueX, valueY) {
   let coordsField = field.getBoundingClientRect();
   let coordsBall = this.elem.getBoundingClientRect();
 
-  let coordX = (coordsBall.left + valueX) - (coordsField.left - field.clientLeft);
+  let coordX = (coordsBall.left + valueX)  - (coordsField.left - field.clientLeft);
   let coordY = (coordsBall.top + valueY) - (coordsField.top - field.clientTop);
+  //console.log(coordX, valueX, (coordsField.left - field.clientLeft));
+
+
+  //script.js:59 -146089710411.2  -146089710661.2 438.5
+  //script.js:59 38.30000000000001  3.3000000000000003 438.5
+
 
   return {
     ballX: coordX,
@@ -74,14 +80,16 @@ Ball.prototype.getFieldSizes = function(valueX, valueY) {
   }
 }
 
+
+
 Ball.prototype.isKeeperHere = function(keeper, ballTop) {
-    let ballBottom = ballTop + this.height;
-    return ( (ballTop >= keeper.top && ballTop <= keeper.bottom)
-    || (ballBottom >= keeper.top && ballBottom <= keeper.bottom) ) ? true : false;
+  let ballBottom = ballTop + this.height;
+  return ( (ballTop >= keeper.top && ballTop <= keeper.bottom)
+  || (ballBottom >= keeper.top && ballBottom <= keeper.bottom) ) ? true : false;
 }
 
-Ball.prototype.move = function(valueX, valueY) {
-  let info = this.getFieldSizes(valueX, valueY);
+Ball.prototype.move = function(valueX, valueY, distanceX) {
+  let info = this.getFieldSizes(valueX, valueY, distanceX);
   //console.log(info);
   let left = info.minX;
   let top = info.minY;
@@ -90,14 +98,14 @@ Ball.prototype.move = function(valueX, valueY) {
   let goal = 0;
 
   if (info.ballX <= info.keepL && info.goalL)  {
-     left = info.keepL;
-     directionY = 1;
+    left = info.keepL;
+    directionY = 1;
   } else if (info.ballX >= info.keepR && info.goalR) {
-      left = info.keepR;
-      directionX = -1;
+    left = info.keepR;
+    directionX = -1;
   } else if (info.ballX >= info.minX && info.ballX <= info.maxX) {
-     left = info.ballX;
-     directionX = 0;
+    left = info.ballX;
+    directionX = 0;
   } else if (info.ballX > info.maxX) {
     left = info.maxX;
     directionX = -1;

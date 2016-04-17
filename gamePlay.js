@@ -6,7 +6,9 @@ class Game {
     this.playerR = 0;
     this.ballX = 0;
     this.ballY = 0;
-    this.BEAT = 1000/30;
+    this.timeBefore = Date.now();
+    this.speedX = .2;
+    this.speedY = .1;
     this._resultLeft = document.querySelector('.leftResult');
     this._resultRight = document.querySelector('.rightResult');
   }
@@ -28,6 +30,7 @@ class Game {
   }
 
   _getDirection() {
+
     if (this.playerR) {
       keeperRight.move(STEP * this.playerR);
     }
@@ -37,10 +40,21 @@ class Game {
     }
 
     if(this.ballX || this.ballY) {
-      let direction = ballO.move(STEP * this.ballX, STEP * this.ballY);
+      //let direction = ballO.move(STEP * this.ballX, STEP * this.ballY);
+      let distanceX = (Date.now() - this.timeBefore) * this.speedX;
+      let distanceY = (Date.now() - this.timeBefore) * this.speedY;
+      let direction = ballO.move(this.ballX * distanceX, this.ballY * distanceY);
+
+      if ( (direction.x || direction.y)) {
+          let r = -0.05 + Math.random() * (0.05*2) ;
+          this.speedY = this.speedY + r;
+          this.speedX += this.speedX > .5 ? 0 : 0.004;
+      }
+
       if (direction.x) {
         this.ballX = direction.x;
       }
+
       if (direction.y) {
         this.ballY = direction.y;
       }
@@ -49,11 +63,13 @@ class Game {
         this._gameScore(direction.goal);
       }
     }
+    this.timeBefore = Date.now();
   }
 
   _pulse() {
     this._getDirection();
-    setTimeout(() => this._pulse.call(this), this.BEAT);
+    window.requestAnimationFrame(() => this._pulse.call(this));
+    //setTimeout(() => this._pulse.call(this), this.BEAT);
   }
 
   _gameScore(goal) {
