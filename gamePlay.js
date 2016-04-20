@@ -3,10 +3,10 @@
 class Game {
   constructor(options) {
     //direction = -1 || 0 || 1
-    this.leftPlayerDirectionY = 0;
-    this.rightPlayerDirectionY = 0;
     this.ballDirectionX = 0;
     this.ballDirectionY = 0;
+    this.playerL = options.playerL;
+    this.playerR = options.playerR;
 
     this.timeBefore = Date.now();
     this.speedBallX = .2;
@@ -37,12 +37,12 @@ class Game {
 
   _move() {
 
-    if (this.rightPlayerDirectionY) {
-      this._movePlayer(keeperRight, this.rightPlayerDirectionY);
+    if (this.playerR.directionY) {
+      this._movePlayer(this.playerR);
     }
 
-    if (this.leftPlayerDirectionY) {
-      this._movePlayer(keeperLeft, this.leftPlayerDirectionY);
+    if (this.playerL.directionY) {
+      this._movePlayer(this.playerL);
     }
 
     if (this.ballDirectionX || this.ballDirectionY) {
@@ -53,8 +53,8 @@ class Game {
     this.timeBefore = Date.now();
   }
 
-  _movePlayer(keeper, direction) {
-    keeper.move(STEP * direction);
+  _movePlayer(keeper) {
+    keeper.move(STEP * keeper.directionY);
   }
 
   _moveBall() {
@@ -98,33 +98,45 @@ class Game {
 
   _onKeyDown(event) {
     if (event.keyCode === DOWNR) {
-      this.rightPlayerDirectionY = 1;
+      this.playerR.directionY = 1;
     }
 
     if (event.keyCode === UPR) {
-      this.rightPlayerDirectionY = -1;
+      this.playerR.directionY = -1;
     }
 
     if (event.keyCode === DOWNL) {
-      this.leftPlayerDirectionY = 1;
+      this.playerL.directionY = 1;
     }
 
     if (event.keyCode === UPL) {
-      this.leftPlayerDirectionY = -1;
+      this.playerL.directionY = -1;
     }
   }
 
   _onKeyUp(event) {
 
     if (event.keyCode === DOWNR || event.keyCode === UPR) {
-      this.rightPlayerDirectionY = 0;
+      this.playerR.directionY = 0;
     }
 
     if (event.keyCode === DOWNL || event.keyCode === UPL) {
-      this.leftPlayerDirectionY = 0;
+      this.playerL.directionY = 0;
     }
   }
 }
 
-let gamePlay = new Game();
+let gamePlay = new Game( {
+    playerL: keeperLeftObj,
+    playerR: keeperRighttObj,
+    ball: keeperLeftObj,
+  });
+
+console.log(gamePlay);
+
 gamePlay.start();
+
+document.body.onclick = (event) => {
+//  let kCoords = fieldObj.el.getBoundingClientRect();
+  //console.log('m:',  event.clientY, 'f-m:', event.clientY - kCoords.top - fieldObj.el.clientTop);
+}
