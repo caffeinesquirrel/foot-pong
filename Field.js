@@ -16,6 +16,3 @@ class Field {
     this.coordY = coords.top + this.el.clientTop;
   }
 }
-
-let fieldObj = new Field();
-console.log(fieldObj);

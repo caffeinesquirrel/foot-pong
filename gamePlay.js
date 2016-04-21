@@ -1,33 +1,23 @@
 'use strict'
 
+const DOWNR = 40;
+const UPR = 38;
+const DOWNL = 83;
+const UPL = 87;
+
 class Game {
   constructor(options) {
-    //direction = -1 || 0 || 1
-    this.ballDirectionX = 0;
-    this.ballDirectionY = 0;
     this.playerL = options.playerL;
     this.playerR = options.playerR;
-
+    this.ball = options.ball;
     this.timeBefore = Date.now();
-    this.speedBallX = .2;
-    this.speedBallY = .1;
     this._resultLeft = document.querySelector('.leftResult');
     this._resultRight = document.querySelector('.rightResult');
   }
 
   start() {
-    this._initBallDirection();
     this._initKeyEvents();
     this._pulse();
-  }
-
-  _initBallDirection() {
-    let min = -2;
-    let max = 2;
-    do {
-      this.ballDirectionX = Math.round(min - 0.5 + Math.random() * (max - min + 1));
-      this.ballDirectionY = Math.round(min - 0.5 + Math.random() * (max - min + 1));
-    } while (this.ballDirectionX === 0 || this.ballDirectionY === 0);
   }
 
   _pulse() {
@@ -36,49 +26,15 @@ class Game {
   }
 
   _move() {
-
-    if (this.playerR.directionY) {
-      this._movePlayer(this.playerR);
-    }
-
-    if (this.playerL.directionY) {
-      this._movePlayer(this.playerL);
-    }
-
-    if (this.ballDirectionX || this.ballDirectionY) {
-      let ballChanges = this._moveBall();
-      this._setBallNextParam(ballChanges);
-      this._setGameScore(ballChanges.goal);
-    }
-    this.timeBefore = Date.now();
-  }
-
-  _movePlayer(keeper) {
-    keeper.move(STEP * keeper.directionY);
-  }
-
-  _moveBall() {
     let dTime = Date.now() - this.timeBefore;
-    let distanceX = dTime * this.speedBallX;
-    let distanceY = dTime * this.speedBallY;
-    return ballO.move(this.ballDirectionX * distanceX, this.ballDirectionY * distanceY);
-  }
 
-  _setBallNextParam(ballChanges) {
+    this.playerR.move(dTime);
+    this.playerL.move(dTime);
 
-    if ((ballChanges.xDirectionChange || ballChanges.yDirectionChange)) {
-      let r = -0.05 + Math.random() * (0.05 * 2);
-      this.speedBallY = this.speedBallY + r;
-      this.speedBallX += this.speedBallX > .5 ? 0 : 0.004;
-    }
+    let result = this.ball.move(dTime);
+    this._setGameScore(result);
 
-    if (ballChanges.xDirectionChange) {
-      this.ballDirectionX = ballChanges.xDirectionChange;
-    }
-
-    if (ballChanges.yDirectionChange) {
-      this.ballDirectionY = ballChanges.yDirectionChange;
-    }
+    this.timeBefore = Date.now();
   }
 
   _setGameScore(goal) {
@@ -126,17 +82,24 @@ class Game {
   }
 }
 
-let gamePlay = new Game( {
-    playerL: keeperLeftObj,
-    playerR: keeperRighttObj,
-    ball: keeperLeftObj,
-  });
-
-console.log(gamePlay);
+let field = new Field();
+let keeperLef = new Keeper({
+  className: '.keeperLeft',
+  field: field
+});
+let keeperRight = new Keeper({
+  className: '.keeperRight',
+  field: field
+});
+let ball = new Ball({
+  playerL: keeperLef,
+  playerR: keeperRight,
+  field: field,
+});
+let gamePlay = new Game({
+  playerL: keeperLef,
+  playerR: keeperRight,
+  ball: ball,
+});
 
 gamePlay.start();
-
-document.body.onclick = (event) => {
-//  let kCoords = fieldObj.el.getBoundingClientRect();
-  //console.log('m:',  event.clientY, 'f-m:', event.clientY - kCoords.top - fieldObj.el.clientTop);
-}
